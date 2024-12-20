@@ -2,18 +2,19 @@
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
+import Header from "@/components/header";
 import FavCard from "@/components/favcard";
 import Footer from "@/components/footer";
 
-const LandingPage: React.FC = () => {
+const HomePage: React.FC = () => {
   const [topRatedPerfumes, setTopRatedPerfumes] = useState<any[]>([]); // State untuk menyimpan parfum top-rated
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true); // State untuk loading
 
-  // Fetch top-rated perfumes
+  // Fetch top-rated perfumes saat komponen dimount
   useEffect(() => {
     const fetchTopRatedPerfumes = async () => {
       try {
-        const response = await fetch("/api/top-rated"); // Ganti dengan path endpoint API Anda
+        const response = await fetch("/api/top-rated"); // Absolute path endpoint API
         if (!response.ok) {
           throw new Error("Failed to fetch top-rated perfumes");
         }
@@ -31,35 +32,17 @@ const LandingPage: React.FC = () => {
 
   return (
     <div className="bg-gradient-to-b from-black via-gray-900 to-gray-800 text-white min-h-screen">
-      {/* Header Section */}
-      <header className="sticky top-0 z-50 bg-gray-900 text-white shadow-lg">
-        <div className="container mx-auto flex justify-between items-center p-4">
-          {/* Logo */}
-          <div className="text-2xl font-bold">
-            <Link href="/">FindScent</Link>
-          </div>
-
-          {/* Navigation Links */}
-          <nav>
-            <ul className="flex space-x-6">
-              <li>
-                <Link href="/login" className="hover:text-gray-400">
-                  Login
-                </Link>
-              </li>
-            </ul>
-          </nav>
-        </div>
-      </header>
+      {/* Header */}
+      <Header />
 
       {/* Hero Section */}
       <section className="flex flex-col items-center justify-center py-16 text-center">
         <h1 className="text-4xl font-bold md:text-6xl text-gray-200">
           Temukan Parfum yang Sesuai dengan Karakter Anda
         </h1>
-        <Link href="/login">
+        <Link href="/search">
           <button className="px-6 py-3 mt-8 text-lg font-semibold text-gray-900 bg-[#CDC69A] rounded-lg hover:bg-[#D9D1BE]">
-            Mulai Sekarang
+            Temukan Parfum
           </button>
         </Link>
       </section>
@@ -70,6 +53,13 @@ const LandingPage: React.FC = () => {
           <h2 className="text-3xl font-bold text-center text-gray-200">
             Top Rated Perfumes
           </h2>
+
+          {/* Show loading indicator */}
+          {loading ? (
+            <div className="flex justify-center items-center mt-8">
+              <p className="text-lg text-gray-400">Loading...</p>
+            </div>
+          ) : topRatedPerfumes.length > 0 ? (
             <div className="grid grid-cols-1 gap-8 mt-8 md:grid-cols-3">
               {topRatedPerfumes.map((item) => (
                 <FavCard
@@ -91,6 +81,11 @@ const LandingPage: React.FC = () => {
                 />
               ))}
             </div>
+          ) : (
+            <div className="flex justify-center items-center mt-8">
+              <p className="text-lg text-gray-400">Tidak ada parfum ditemukan.</p>
+            </div>
+          )}
         </div>
       </section>
       <Footer></Footer>
@@ -98,4 +93,4 @@ const LandingPage: React.FC = () => {
   );
 };
 
-export default LandingPage;
+export default HomePage;
