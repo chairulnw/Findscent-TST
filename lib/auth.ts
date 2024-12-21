@@ -7,7 +7,13 @@ import { compare } from "bcrypt";
 
 export const authOptions: NextAuthOptions = {
     adapter: PrismaAdapter(prisma),
-    session: {strategy : "jwt"},
+    session: {
+      strategy : "jwt",
+      maxAge: 30 * 24 * 60 * 60, // 30 days
+    },
+    jwt: {
+      secret: process.env.JWT_SECRET,
+    },
     pages:{
         signIn: '/login'
     },
@@ -44,6 +50,7 @@ export const authOptions: NextAuthOptions = {
       callbacks: {
         async jwt({ token, user }) {
           if (user) {
+          token.accessToken = user.accessToken; // Include accessToken from user
             return {
               ...token,
               name: user.name,
@@ -57,6 +64,7 @@ export const authOptions: NextAuthOptions = {
             user: {
               ...session.user,
               name: token.name,
+              accessToken: token.accessToken, // Add accessToken to session
             }
           }
         },

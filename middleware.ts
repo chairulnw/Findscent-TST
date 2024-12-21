@@ -1,1 +1,1 @@
-export { authOptions as middleware } from "./lib/auth";
+// export { authOptions as middleware } from "./lib/auth";

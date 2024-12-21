@@ -1,4 +1,5 @@
 import React from "react";
+import Image from "next/image";
 
 interface CardProps {
   perfume: string;
@@ -27,10 +28,13 @@ const Card: React.FC<CardProps> = ({
     <div className="p-4 border rounded-lg shadow-md bg-gray-300 text-black flex flex-col items-center">
       {/* Image Section */}
       <div className="w-full flex justify-center mb-4">
-        <img
-          src={imgUrl}
-          alt={`${perfume} image`}
-          className="w-40 h-56 object-cover rounded-lg"
+      <Image
+        src={imgUrl} // URL gambar
+        alt={`${perfume} image`} // Deskripsi gambar
+        width={160} // Lebar gambar (40 * 4)
+        height={224} // Tinggi gambar (56 * 4)
+        className="object-cover rounded-lg" // Kelas CSS
+        priority // Opsional, tambahkan jika perlu optimasi loading gambar
         />
       </div>
 
